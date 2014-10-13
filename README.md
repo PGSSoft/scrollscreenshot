@@ -58,7 +58,8 @@ and move finger on screen. You will see something like
 ```
 In your case device you are looking for has number **2**.
 
-You can now start capturing. Unlock screen, start app you want to scroll-capture and type (replace *2* by your device input number): 
+
+You can now start capturing. Download [latest scrollscreenshot binary](https://github.com/PGSSoft/scrollscreenshot/blob/master/binaries/scrollscreenshot-latest.jar), unlock screen, start app you want to scroll-capture and type (replace *2* by your device input number): 
 
 ```
 java -cp scrollscreenshot-0.1.jar com.pgssoft.scrollscreenshot.ScrollScreenShot -i 2
