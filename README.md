@@ -1,12 +1,12 @@
 scrollscreenshot
 ================
 
-Make Android screenshots of scrollable screen content - brought to you by ** [PGS Software](www.pgs-soft.com) **
+Make Android screenshots of scrollable screen content - brought to you by [PGS Software](www.pgs-soft.com)
 
 
 This tool makes a number of screenshots, scrolling screen content by half height each time. Status bar and navigation bar are included only once.
 
-![Illustration how images are merged](https://github.com/PGSSoft/scrollscreenshot/illustration.png "Illustration how images are merged")
+![Illustration how images are merged](https://github.com/PGSSoft/scrollscreenshot/blob/master/illustration.png "Illustration how images are merged")
 
 
 Documentation:
@@ -66,7 +66,7 @@ java -cp scrollscreenshot-0.1.jar com.pgssoft.scrollscreenshot.ScrollScreenShot 
 
 If eveything goes well, you will see something like:
 
-![SAMPLE](https://github.com/PGSSoft/scrollscreenshot/sample.png =250x)
+![SAMPLE](https://github.com/PGSSoft/scrollscreenshot/blob/master/sample.png =250x)
 
 
 
