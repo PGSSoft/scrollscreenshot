@@ -64,10 +64,9 @@ You can now start capturing. Unlock screen, start app you want to scroll-capture
 java -cp scrollscreenshot-0.1.jar com.pgssoft.scrollscreenshot.ScrollScreenShot -i 2
 ```
 
-If eveything goes well, you will see something like:
+If eveything goes well, you will get file `out.png` with something like:
 
-![SAMPLE](https://github.com/PGSSoft/scrollscreenshot/blob/master/sample.png =250x)
-
+<img src="https://github.com/PGSSoft/scrollscreenshot/blob/master/sample.png" alt="SAMPLE" width="200">
 
 
 Todo:
