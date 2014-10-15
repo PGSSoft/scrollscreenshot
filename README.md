@@ -1,7 +1,7 @@
 scrollscreenshot
 ================
 
-Make Android screenshots of scrollable screen content - brought to you by [PGS Software](www.pgs-soft.com)
+Make Android screenshots of scrollable screen content - brought to you by [PGS Software](http://www.pgs-soft.com)
 
 
 This tool makes a number of screenshots, scrolling screen content by half height each time. Status bar and navigation bar are included only once.
