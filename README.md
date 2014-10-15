@@ -1,7 +1,7 @@
 scrollscreenshot
 ================
 
-Make Android screenshots of scrollable screen content - brought to you by [PGS Software](www.pgs-soft.com)
+Make Android screenshots of scrollable screen content - brought to you by [PGS Software SA](http://www.pgs-soft.com)
 
 
 This tool makes a number of screenshots, scrolling screen content by half height each time. Status bar and navigation bar are included only once.
@@ -59,10 +59,10 @@ and move finger on screen. You will see something like
 In your case device you are looking for has number **2**.
 
 
-You can now start capturing. Download [latest scrollscreenshot binary](https://github.com/PGSSoft/scrollscreenshot/blob/master/binaries/scrollscreenshot-latest.jar), unlock screen, start app you want to scroll-capture and type (replace *2* by your device input number): 
+You can now start screen capturing. Download [latest scrollscreenshot binary](https://github.com/PGSSoft/scrollscreenshot/blob/master/binaries/scrollscreenshot-latest.jar?raw=true), unlock screen, start app you want to scroll-capture and type (replace *2* by your device input number): 
 
 ```
-java -cp scrollscreenshot-0.1.jar com.pgssoft.scrollscreenshot.ScrollScreenShot -i 2
+java -cp scrollscreenshot-latest.jar com.pgssoft.scrollscreenshot.ScrollScreenShot -i 2
 ```
 
 If eveything goes well, you will get file `out.png` with something like:
@@ -76,6 +76,7 @@ Todo:
 * scrolling in all 4 directions
 * option for disable image merging
 * option for choosing ADB device
+* automatic detection of scroll area edge
 
 
 Changelog
@@ -90,15 +91,18 @@ Acknowledgments
 * description of input events was taken from
 [this blog post](http://ktnr74.blogspot.com/2013/06/emulating-touchscreen-interaction-with.html)
 
-* command line parsing uses http://jcommander.org/
+* command line parsing uses http://jcommander.org/ licensed under [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0)
 
+* device communication handled by [AOSP](http://source.android.com/) tools licensed under [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0)
 
 
 License
 ----
 
 scrollscreenshot for Android
-Copyright (c) 2014 PGS Software
+
+Copyright (c) 2014 PGS Software SA
+
 https://github.com/PGSSoft/scrollscreenshot
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
