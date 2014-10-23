@@ -80,6 +80,10 @@ If eveything goes well, you will get file `out.png` with something like:
 
 <img src="https://github.com/PGSSoft/scrollscreenshot/blob/master/sample.png" alt="SAMPLE" width="200">
 
+Left-to-right mode will give you something like this:
+
+<img src="https://github.com/PGSSoft/scrollscreenshot/blob/master/samplehorizontal.png" alt="SAMPLE" width="800">
+
 
 Todo:
 -----
