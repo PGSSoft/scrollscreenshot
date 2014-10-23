@@ -1,6 +1,6 @@
 /**
     scrollscreenshot for Android
-    Copyright (c) 2014 PGS Software
+    Copyright (c) 2014 PGS Software SA
     https://github.com/PGSSoft/scrollscreenshot
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -18,7 +18,7 @@
     IN THE SOFTWARE.
 
  
-    author: Tomasz Zielinski, PGS Software
+    author: Tomasz Zielinski, PGS Software SA
     https://github.com/PGSSoft/scrollscreenshot
 
  */
@@ -99,9 +99,8 @@ public class ScrollScreenShot {
 
         if (null != bridge){
 
-            if (false == waitUntilConnected(bridge))
-            {
-                System.out.println("Error connection to device");
+            if (false == waitUntilConnected(bridge)) {
+                System.out.println("Error connecting to device");
                 return -1;
             }
 
@@ -162,7 +161,7 @@ public class ScrollScreenShot {
                             int bottomy = topy + img.height / 2; // 0.75 of screen height
                             int x = img.width / 2; // middle of screen width
 
-                            scrollScreen(device, params.inputDeviceNo, x, bottomy, x, topy);
+                            scrollScreen(device, params.inputDeviceNo, x, bottomy, x, topy, params.inertia);
                         }
 
                     }
@@ -193,7 +192,7 @@ public class ScrollScreenShot {
         return 0;
     }
 
-    void scrollScreen(IDevice device, int input, int x1, int y1, int x2, int y2) throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException, IOException {
+    void scrollScreen(IDevice device, int input, int x1, int y1, int x2, int y2, int inertia) throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException, IOException {
 
         // simulate finger press
 
@@ -209,22 +208,47 @@ public class ScrollScreenShot {
         //device.executeShellCommand("sendevent /dev/input/event2 0 2 0", rec); // end of separate touch data
         device.executeShellCommand("sendevent /dev/input/event"+input+" 0 0 0", rec); // end of report
 
+        int steps = 10;
+
         // simulate finger drag
-        for (int i=1; i<=10; i++){
+        for (int i=1; i<=steps; i++){
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            int x = x1 + i*(x2-x1)/10;
-            int y = y1 + i*(y2-y1)/10;
+            int x = x1 + i*(x2-x1)/steps;
+            int y = y1 + i*(y2-y1)/steps;
+
+            if (i == steps)
+            {
+                x -= inertia;
+                y -= inertia;
+            }
+
             device.executeShellCommand("sendevent /dev/input/event"+input+" 3 53 "+x, rec); // ABS_MT_POSITION_X (53) - x coordinate of the touch
             device.executeShellCommand("sendevent /dev/input/event"+input+" 3 54 "+y, rec); // ABS_MT_POSITION_Y (54) - y coordinate of the touch
             device.executeShellCommand("sendevent /dev/input/event"+input+" 3 49 6", rec); // ABS_MT_TOUCH_MINOR (49)
             device.executeShellCommand("sendevent /dev/input/event"+input+" 0 0 0", rec); // end of report
 
         }
+
+        // stop dragging finger to avoid kinetic scroll
+        for (int i=1; i<3; i++){
+
+            device.executeShellCommand("sendevent /dev/input/event"+input+" 3 53 "+(x2-inertia), rec); // ABS_MT_POSITION_X (53) - x coordinate of the touch
+            device.executeShellCommand("sendevent /dev/input/event"+input+" 3 54 "+(y2-inertia), rec); // ABS_MT_POSITION_Y (54) - y coordinate of the touch
+            device.executeShellCommand("sendevent /dev/input/event"+input+" 3 49 6", rec); // ABS_MT_TOUCH_MINOR (49)
+            device.executeShellCommand("sendevent /dev/input/event"+input+" 0 0 0", rec); // end of report
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
         // simulate finger release
         release(device, input);

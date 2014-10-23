@@ -16,11 +16,15 @@ Documentation:
 Usage: com.pgssoft.scrollscreenshot.ScrollScreenShot [options]
   Options:
     -c, --count
-       Number of screenshot to take (2nd+ adds half screen height each)
+       Number of screenshot to take (each but first adds half screen height)
        Default: 5
     -h, --help
        Display this help
        Default: false
+    -e, --inertia
+       Inertia of content, how many pixels are required to start dragging. Use
+       non-zero value if there are duplicated stripes.
+       Default: 0
   * -i, --inputdevice
        Digitizer input device number, N in /dev/input/eventN
        Default: 1
@@ -95,6 +99,8 @@ Acknowledgments
 
 * device communication handled by [AOSP](http://source.android.com/) tools licensed under [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0)
 
+
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-scrollscreenshot-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1047)
 
 License
 ----

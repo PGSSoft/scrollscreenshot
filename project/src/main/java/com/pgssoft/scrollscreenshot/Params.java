@@ -30,7 +30,7 @@ public class Params{
     @Parameter(names = { "-i", "--inputdevice" }, description = "Digitizer input device number, N in /dev/input/eventN", required = true)
     Integer inputDeviceNo = 1;
 
-    @Parameter(names = { "-c", "--count" }, description = "Number of screenshot to take (2nd+ adds half screen height each)")
+    @Parameter(names = { "-c", "--count" }, description = "Number of screenshot to take (each but first adds half screen height)")
     int count = 5;
 
     @Parameter(names = { "-p", "--pathsdk" }, description = "Path to Android SDK")
@@ -41,6 +41,9 @@ public class Params{
 
     @Parameter(names = { "-n", "--nameprefix" }, description = "Output filename prefix")
     String nameprefix = "out";
+
+    @Parameter(names = { "-e", "--inertia" }, description = "Inertia of content, how many pixels are required to start dragging. Use non-zero value if there are duplicated stripes.")
+    Integer inertia = 0;
 
     /* to be done in future
 
