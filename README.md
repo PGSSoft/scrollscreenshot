@@ -4,7 +4,7 @@ scrollscreenshot
 Make Android screenshots of scrollable screen content - brought to you by [PGS Software SA](http://www.pgs-soft.com)
 
 
-This tool makes a number of screenshots, scrolling screen content by half height each time. Status bar and navigation bar are included only once.
+This tool makes a number of screenshots, scrolling screen content automatically between each shot. By default status bar and navigation bar are included only once.
 
 ![Illustration how images are merged](https://github.com/PGSSoft/scrollscreenshot/blob/master/illustration.png "Illustration how images are merged")
 
@@ -16,8 +16,14 @@ Documentation:
 Usage: com.pgssoft.scrollscreenshot.ScrollScreenShot [options]
   Options:
     -c, --count
-       Number of screenshot to take (each but first adds half screen height)
+       Number of screenshot to take
        Default: 5
+    -v, --device
+       Device ID, first device is used if not specified (i.e. "4df1902336814fa6"
+       or "192.168.56.102:5555")
+    -d, --direction
+       Swipe direction: topdown (default), leftright (implies "--stitch none")
+       Default: topdown
     -h, --help
        Display this help
        Default: false
@@ -33,9 +39,10 @@ Usage: com.pgssoft.scrollscreenshot.ScrollScreenShot [options]
        Default: out
     -p, --pathsdk
        Path to Android SDK
-    -s, --separate
-       Save separate pictures instead of merging
-       Default: false
+    -s, --stitch
+       Stitch mode: full (smooth stitch), none (merged full screenshots),
+       separate (separate files)
+       Default: full
 
 ```
 
@@ -78,8 +85,6 @@ Todo:
 -----
 
 * scrolling in all 4 directions
-* option for disable image merging
-* option for choosing ADB device
 * automatic detection of scroll area edge
 
 
@@ -87,6 +92,7 @@ Changelog
 ---------
 
 * 0.1 - initial release, only top-down scrolling for first device found by ADB
+* 0.2 - scrolling top-down and left-right, stitch now works in smooth/none/separate modes, ADB device can be choosen by id
 
 
 Acknowledgments

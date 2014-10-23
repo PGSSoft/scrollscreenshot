@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class ScrollScreenShot {
 
@@ -65,6 +66,11 @@ public class ScrollScreenShot {
         if (params.help){
             jcom.usage();
             return;
+        }
+
+        if (params.direction.equals(Params.DIR_LEFTRIGHT) && params.stitch.equals(Params.STITCH_FULL)){
+            System.out.println("* topdown direction detected, reverting --stitch to \"none\"");
+            params.stitch = Params.STITCH_NONE;
         }
 
         int ret = new ScrollScreenShot().process(params);
@@ -107,7 +113,25 @@ public class ScrollScreenShot {
             IDevice[] devices = bridge.getDevices();
             if (devices.length>0)
             {
-                IDevice device = devices[0]; // TODO pick requested device here
+                IDevice device = devices[0]; // first by default
+
+                if (null != params.deviceId)
+                {
+                    device = null;
+                    for (IDevice iDevice : devices) {
+                        if (params.deviceId.trim().toLowerCase().equals(iDevice.getSerialNumber().trim().toLowerCase()))
+                        {
+                            device = iDevice;
+                            break;
+                        }
+                    }
+                    if (null == device)
+                    {
+                       System.out.println("Couldn't find device with id: "+params.deviceId);
+                       return -1;
+                    }
+                }
+
 
                 try {
 
@@ -116,11 +140,24 @@ public class ScrollScreenShot {
 
                     for (int count = 0; count < params.count; count++) {
 
+                        System.out.println(String.format("Screenshot %d of %d", count+1, params.count));
+
                         RawImage img = device.getScreenshot();
 
-                        if (summaryImage==null && false == params.separate){
-                            summaryImage = new BufferedImage(img.width, (int)(img.height*(0.5+params.count/2.0)),BufferedImage.TYPE_INT_ARGB);
-                            summaryImageGfx = summaryImage.getGraphics();
+                        if (summaryImage==null){
+                            if( params.stitch.equals( Params.STITCH_FULL )) {
+                                summaryImage = new BufferedImage(img.width, (int) (img.height * (0.5 + params.count / 2.0)), BufferedImage.TYPE_INT_ARGB);
+                                summaryImageGfx = summaryImage.getGraphics();
+                            }
+                            if( params.stitch.equals( Params.STITCH_NONE ) && false == params.direction.equals(Params.DIR_LEFTRIGHT)) {
+                                summaryImage = new BufferedImage(img.width, (int) (img.height * params.count), BufferedImage.TYPE_INT_ARGB);
+                                summaryImageGfx = summaryImage.getGraphics();
+                            }
+
+                            if( params.stitch.equals( Params.STITCH_NONE ) && true == params.direction.equals(Params.DIR_LEFTRIGHT)) {
+                                summaryImage = new BufferedImage(img.width * params.count, img.height, BufferedImage.TYPE_INT_ARGB);
+                                summaryImageGfx = summaryImage.getGraphics();
+                            }
                         }
 
                         BufferedImage oneScreenImage = new BufferedImage(img.width, img.height, BufferedImage.TYPE_INT_ARGB);
@@ -139,15 +176,29 @@ public class ScrollScreenShot {
                         {
                             summaryImageGfx.drawImage(oneScreenImage, 0, h * count, null);
                         } else {
-                            // skip first 0.25 of height of current image, draw
-                            summaryImageGfx.drawImage(
-                                    oneScreenImage,
-                                    0, (int) (h * (0.25 + (count / 2.0))), w, (int) (h * (1.0 + (count / 2.0))),
-                                    0, (int) (0.25 * h), w, h, null);
 
+                            if (params.stitch.equals(Params.STITCH_FULL)) {
+                                // skip first 0.25 of height of current image, draw
+                                summaryImageGfx.drawImage(
+                                        oneScreenImage,
+                                        0, (int) (h * (0.25 + (count / 2.0))), w, (int) (h * (1.0 + (count / 2.0))),
+                                        0, (int) (0.25 * h), w, h, null);
+                            }
+                            if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_TOPDOWN)) {
+                                summaryImageGfx.drawImage(
+                                        oneScreenImage,
+                                        0, (int) (h * count), w, (int) (h * (1.0 + (count))),
+                                        0, (int) 0, w, h, null);
+                            }
+                            if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_LEFTRIGHT)) {
+                                summaryImageGfx.drawImage(
+                                        oneScreenImage,
+                                        w * count, 0, (int)(w*(1.0+count)), h,
+                                        0, (int) 0, w, h, null);
+                            }
                         }
 
-                        if (true == params.separate ) {
+                        if ( params.stitch.equals(Params.STITCH_SEPARATE )) {
                             ImageOutputStream ios = ImageIO.createImageOutputStream(new File(params.nameprefix + count + ".png"));
                             imageWriter.setOutput(ios);
                             imageWriter.write(oneScreenImage);
@@ -157,16 +208,28 @@ public class ScrollScreenShot {
                         // scroll window
                         if (count < params.count-1) {
 
-                            int topy = img.height / 4; // 0.25 of screen height
-                            int bottomy = topy + img.height / 2; // 0.75 of screen height
-                            int x = img.width / 2; // middle of screen width
+                            if ( params.direction.equals(Params.DIR_TOPDOWN) ) {
 
-                            scrollScreen(device, params.inputDeviceNo, x, bottomy, x, topy, params.inertia);
+                                int topy = img.height / 4; // 0.25 of screen height
+                                int bottomy = topy + img.height / 2; // 0.75 of screen height
+                                int x = img.width / 2; // middle of screen width
+
+                                scrollScreen(device, params.inputDeviceNo, x, bottomy, x, topy, params.inertia);
+                            }
+
+                            if ( params.direction.equals(Params.DIR_LEFTRIGHT) ) {
+
+                                int y = img.height / 2;
+                                int leftx = img.width / 10; // 0.2 of screen width
+                                int rightx = img.width - leftx; // 0.8 of screen width
+
+                                scrollScreen(device, params.inputDeviceNo, rightx, y, leftx, y, params.inertia);
+                            }
                         }
 
                     }
 
-                    if (false == params.separate) {
+                    if (false == params.stitch.equals(Params.STITCH_SEPARATE )) {
 
                         ImageOutputStream ios = ImageIO.createImageOutputStream(new File(params.nameprefix + ".png"));
                         imageWriter.setOutput(ios);
@@ -265,7 +328,7 @@ public class ScrollScreenShot {
         device.executeShellCommand("sendevent /dev/input/event"+input+" 0 0 0", rec); // end of report
 
         try {
-            Thread.sleep(50);
+            Thread.sleep(150);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
