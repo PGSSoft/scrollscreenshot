@@ -172,31 +172,33 @@ public class ScrollScreenShot {
                         int h = oneScreenImage.getHeight();
                         int w = oneScreenImage.getWidth();
 
-                        if (count == 0)
-                        {
-                            summaryImageGfx.drawImage(oneScreenImage, 0, h * count, null);
-                        } else {
+						if(summaryImageGfx != null) {
+							if (count == 0)
+							{
+								summaryImageGfx.drawImage(oneScreenImage, 0, h * count, null);
+							} else {
 
-                            if (params.stitch.equals(Params.STITCH_FULL)) {
-                                // skip first 0.25 of height of current image, draw
-                                summaryImageGfx.drawImage(
-                                        oneScreenImage,
-                                        0, (int) (h * (0.25 + (count / 2.0))), w, (int) (h * (1.0 + (count / 2.0))),
-                                        0, (int) (0.25 * h), w, h, null);
-                            }
-                            if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_TOPDOWN)) {
-                                summaryImageGfx.drawImage(
-                                        oneScreenImage,
-                                        0, (int) (h * count), w, (int) (h * (1.0 + (count))),
-                                        0, (int) 0, w, h, null);
-                            }
-                            if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_LEFTRIGHT)) {
-                                summaryImageGfx.drawImage(
-                                        oneScreenImage,
-                                        w * count, 0, (int)(w*(1.0+count)), h,
-                                        0, (int) 0, w, h, null);
-                            }
-                        }
+								if (params.stitch.equals(Params.STITCH_FULL)) {
+									// skip first 0.25 of height of current image, draw
+									summaryImageGfx.drawImage(
+											oneScreenImage,
+											0, (int) (h * (0.25 + (count / 2.0))), w, (int) (h * (1.0 + (count / 2.0))),
+											0, (int) (0.25 * h), w, h, null);
+								}
+								if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_TOPDOWN)) {
+									summaryImageGfx.drawImage(
+											oneScreenImage,
+											0, (int) (h * count), w, (int) (h * (1.0 + (count))),
+											0, (int) 0, w, h, null);
+								}
+								if (params.stitch.equals(Params.STITCH_NONE) && params.direction.equals(Params.DIR_LEFTRIGHT)) {
+									summaryImageGfx.drawImage(
+											oneScreenImage,
+											w * count, 0, (int)(w*(1.0+count)), h,
+											0, (int) 0, w, h, null);
+								}
+							}
+						}
 
                         if ( params.stitch.equals(Params.STITCH_SEPARATE )) {
                             ImageOutputStream ios = ImageIO.createImageOutputStream(new File(params.nameprefix + count + ".png"));
