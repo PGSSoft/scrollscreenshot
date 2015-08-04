@@ -97,6 +97,7 @@ Changelog
 
 * 0.1 - initial release, only top-down scrolling for first device found by ADB
 * 0.2 - scrolling top-down and left-right, stitch now works in smooth/none/separate modes, ADB device can be choosen by id
+* 0.3 - fixed NPE when using separate stitch mode
 
 
 Acknowledgments
